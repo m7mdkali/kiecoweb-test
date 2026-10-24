@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kieco Exchange | Send money and exchange currency</title>
+  <meta name="description" content="Kieco Exchange: send money and exchange currency.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="preconnect" href="https://flagcdn.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Cormorant+Garamond:wght@500;600&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Montserrat:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11.1.4/swiper-bundle.min.css">
+  <script>(function(){var h=document.documentElement;h.classList.add("js");var seen=false;try{seen=sessionStorage.getItem("kiecoIntroSeen")==="1";}catch(e){}if(!seen&&!window.matchMedia("(prefers-reduced-motion: reduce)").matches){h.classList.add("intro-on");}})();</script>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- Opening animation: a deep navy screen. The gold logo rises out of a soft blur, the words settle, then the curtain opens. js/main.js removes it after about 3.8 seconds. -->
+  <div class="intro" id="intro">
+    <span class="intro-panel intro-top" aria-hidden="true"></span>
+    <span class="intro-panel intro-bottom" aria-hidden="true"></span>
+    <div class="intro-content">
+      <span class="intro-glow" aria-hidden="true"></span>
+      <span class="intro-frame" aria-hidden="true"></span>
+      <img class="intro-logo" id="intro-logo" src="images/kieco-logo-gold.png" alt="Kieco Exchange" width="246" height="305">
+      <span class="intro-rule" aria-hidden="true"></span>
+      <div class="intro-text">
+        <p class="intro-words" data-text="introWords"></p>
+        <p class="intro-place" data-text="introPlace"></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="scroll-progress" id="scroll-progress" aria-hidden="true"></div>
+  <a class="skip-link" href="#main" data-text="skipLink"></a>
+
+  <!-- ===== TOP BAR: call, email and WhatsApp ===== -->
+  <div class="top-bar" id="top">
+    <div class="tb-links">
+      <a class="tb-link" data-href="tel" dir="ltr" aria-label="Call">
+        <span class="tb-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg></span>
+        <span class="tb-text"><b data-text="topCall"></b> <span data-text="phone"></span></span>
+      </a>
+      <a class="tb-link" data-href="mail" dir="ltr" aria-label="Email">
+        <span class="tb-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg></span>
+        <span class="tb-text" data-text="email"></span>
+      </a>
+      <a class="tb-link tb-whatsapp" data-href="whatsapp" target="_blank" rel="noopener" aria-label="WhatsApp">
+        <span class="tb-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/></svg></span>
+        <span class="tb-text" data-text="whatsappLabel"></span>
+      </a>
+    </div>
+    <button class="lang-btn" type="button" data-text="langButton"></button>
+  </div>
+
+  <!-- ===== HEADER ===== -->
+  <header class="site-header">
+    <a class="logo" href="#top" aria-label="Kieco Exchange"></a>
+    <div class="site-search" id="site-search">
+      <label class="search">
+        <svg class="search-ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        <input type="search" id="site-q" data-placeholder="searchPlaceholder" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="site-results" aria-autocomplete="list">
+        <kbd class="search-kbd" aria-hidden="true">/</kbd>
+        <button class="search-clear" id="site-clear" type="button" hidden>&times;</button>
+      </label>
+      <ul class="site-results" id="site-results" role="listbox" hidden></ul>
+    </div>
+    <button class="search-toggle" id="search-toggle" type="button" aria-expanded="false" aria-controls="site-search">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+    </button>
+    <nav class="main-nav" aria-label="Main menu">
+      <ul id="nav-list"></ul>
+    </nav>
+    <a class="btn btn-primary btn-small btn-motion" data-href="register" data-text="sendMoney"></a>
+    <button class="menu-toggle" type="button" aria-expanded="false" aria-label="Menu">&#9776;</button>
+  </header>
+
+  <main id="main">
+
+    <!-- ===== 1. HERO SLIDER ===== -->
+    <section id="home" class="hero">
+      <div class="swiper hero-slider">
+        <div class="swiper-wrapper" id="hero-slides"></div>
+        <div class="swiper-pagination"></div>
+      </div>
+    </section>
+
+    <!-- ===== 2. CHECK THE EXCHANGE RATE ===== -->
+    <section id="rates" class="rate-check">
+      <div class="rate-box">
+        <h2 data-text="rateTitle"></h2>
+        <p class="section-intro" data-text="rateIntro"></p>
+        <div class="rate-toolbar">
+          <div class="tabs">
+            <button class="tab active" type="button" data-text="tabTransfer"></button>
+            <button class="tab" type="button" data-text="tabFx"></button>
+          </div>
+          <div class="rate-search">
+            <input type="search" id="rate-search" data-placeholder="rateSearchPlaceholder" aria-label="Search" autocomplete="off">
+            <ul class="rate-dropdown" id="rate-dropdown" hidden></ul>
+          </div>
+        </div>
+
+        <!-- Money transfer: the calculator is always here; the receiving country is picked from the list -->
+        <div id="transfer-pane">
+          <div class="calc" id="calc">
+            <div class="calc-fields">
+              <div class="fx-field calc-send">
+                <span class="calc-label" data-text="calcSend"></span>
+                <span class="fx-input-wrap">
+                  <input type="number" id="calc-send" min="0" step="any" value="100" inputmode="decimal">
+                  <span class="fx-flag" id="calc-send-flag"></span>
+                  <b id="calc-send-unit"></b>
+                </span>
+              </div>
+              <div class="fx-dd dest-dd" id="dest-dd">
+                <div class="fx-field calc-receive-field">
+                  <span class="calc-label" data-text="calcReceive"></span>
+                  <span class="calc-out"><b id="calc-receive">0.00</b></span>
+                  <button class="dest-trigger" id="dest-trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-controls="dest-menu">
+                    <span class="fx-flag" id="dest-flag"></span>
+                    <b id="dest-code"></b>
+                  </button>
+                  <span class="fx-chev" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></span>
+                </div>
+                <ul class="fx-menu" id="dest-menu" role="listbox" hidden></ul>
+              </div>
+            </div>
+            <div class="calc-result">
+              <div class="calc-result-top">
+                <div>
+                  <div class="calc-flow" aria-hidden="true">
+                    <span class="calc-flag" id="calc-flow-from"></span>
+                    <svg class="calc-flow-icon" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h13"/><path d="m14 4 4 4-4 4"/><path d="M20 16H7"/><path d="m10 12-4 4 4 4"/></svg>
+                    <span class="calc-flag" id="calc-flow-to"></span>
+                  </div>
+                  <span class="calc-label calc-label-light" data-text="calcRate"></span>
+                  <strong class="calc-rate" id="calc-rate"></strong>
+                </div>
+                <span class="calc-best" id="calc-best" data-text="calcBest" hidden></span>
+              </div>
+              <div class="calc-meta">
+                <span><span data-text="calcDelivery"></span>: <b id="calc-delivery"></b></span>
+                <span><span data-text="calcCommission"></span>: <b id="calc-commission"></b></span>
+              </div>
+              <p class="calc-note" data-text="calcNote"></p>
+            </div>
+            <div class="calc-actions">
+              <a class="btn btn-ghost" href="#faqs" data-text="btnFaqs"></a>
+              <a class="btn btn-primary" data-href="register" data-text="btnRemit"></a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Foreign currency: the rate table -->
+        <div id="fx-pane" hidden>
+          <div class="fx-head">
+            <span class="fx-live"><i aria-hidden="true"></i><span data-text="fxLive"></span></span>
+            <span class="fx-title" data-text="fxTitle"></span>
+          </div>
+          <div class="fx-card">
+            <div class="fx-dd" id="fx-dd">
+              <div class="fx-field">
+                <span class="calc-label" id="fx-currency-label" data-text="fxCurrency"></span>
+                <button class="fx-trigger" id="fx-trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-controls="fx-menu" aria-labelledby="fx-currency-label">
+                  <span class="fx-flag" id="fx-flag"></span>
+                  <span class="fx-trigger-name" id="fx-name"></span>
+                </button>
+                <span class="fx-chev" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></span>
+              </div>
+              <ul class="fx-menu" id="fx-menu" role="listbox" aria-labelledby="fx-currency-label" hidden></ul>
+              <select id="fx-select" hidden tabindex="-1" aria-hidden="true"></select>
+            </div>
+            <label class="fx-field">
+              <span class="calc-label" data-text="fxAmount"></span>
+              <span class="fx-input-wrap">
+                <input type="number" id="fx-amount" min="0" step="any" value="1000" inputmode="decimal">
+                <b id="fx-code"></b>
+              </span>
+            </label>
+          </div>
+          <div class="fx-results">
+            <div class="fx-result is-buy"><span class="fx-result-label" data-text="fxBuy"></span><strong id="fx-buy"></strong></div>
+            <div class="fx-result is-sell"><span class="fx-result-label" data-text="fxSell"></span><strong id="fx-sell"></strong></div>
+          </div>
+          <div class="calc-actions fx-actions">
+            <a class="btn btn-ghost" href="#branches" data-text="fxBranch"></a>
+            <a class="btn btn-primary" data-href="register" data-text="fxOrder"></a>
+          </div>
+        </div>
+
+        <div class="rate-foot">
+          <p class="rate-source" data-text="rateSource"></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 3. CURRENCY TICKER ===== -->
+    <section class="ticker-section" aria-label="Currency ticker">
+      <div class="ticker">
+        <div class="ticker-track" id="ticker-track"></div>
+      </div>
+      <div class="ticker-nav">
+        <button class="ticker-btn" id="ticker-prev" type="button" aria-label="Previous">&lsaquo;</button>
+        <button class="ticker-btn" id="ticker-next" type="button" aria-label="Next">&rsaquo;</button>
+      </div>
+    </section>
+
+    <!-- ===== 3b. OUR STORY: a clock-style frame that keeps turning, and the "Why choose KIECO" button ===== -->
+    <section class="story" id="story">
+      <div class="story-inner">
+        <div class="story-clock" aria-hidden="true">
+          <span class="clock-frame"></span>
+          <span class="clock-ring"></span>
+          <span class="clock-hand"></span>
+          <span class="clock-center">
+            <span class="clock-kicker" data-text="storyKicker"></span>
+            <span class="clock-year" data-text="founded"></span>
+            <span class="clock-tag" data-text="storyTag"></span>
+          </span>
+        </div>
+        <div class="story-text">
+          <p class="story-eyebrow" data-text="storyEyebrow"></p>
+          <h2 data-text="storyTitle"></h2>
+          <p class="story-body" data-text="storyText"></p>
+          <div class="story-actions">
+            <button class="story-link" id="story-discover" type="button" data-text="storyDiscover"></button>
+            <button class="btn btn-primary" id="why-open" type="button" aria-expanded="false" aria-controls="why">
+              <span class="why-open-text" data-text="whyOpenText"></span>
+              <span class="why-close-text" data-text="helpCloseText"></span>
+              <span class="help-chev" aria-hidden="true"></span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 3c. WHY CHOOSE KIECO (opens when the button in the story is pressed) ===== -->
+    <!-- Numbers: digits roll into place, then settle -->
+    <section class="pulse-stats" id="stats" aria-labelledby="stats-title">
+      <div class="ps-inner">
+        <div class="ps-intro">
+          <div class="ps-logo-wrap">
+            <div class="logo-flip ps-logo">
+              <img class="footer-logo" src="images/kieco-logo-gold.png" alt="Kieco Exchange" width="246" height="305">
+              <img class="footer-logo footer-logo-back" src="images/kieco-logo-gold.png" alt="" aria-hidden="true" width="246" height="305">
+            </div>
+          </div>
+          <p class="ps-eyebrow" data-text="statsEyebrow"></p>
+          <h2 class="ps-title" id="stats-title"><span data-text="statsTitleA"></span> <em data-text="statsTitleB"></em></h2>
+          <p class="ps-text" data-text="statsText"></p>
+        </div>
+        <div class="ps-grid">
+          <div class="ps-tile" style="--d:0">
+            <div class="ps-card">
+              <span class="ps-num" data-value="1979"></span>
+              <span class="ps-label" data-text="stat1Label"></span>
+              <span class="ps-bar" aria-hidden="true"></span>
+            </div>
+          </div>
+          <a class="ps-tile is-link" href="#rates" style="--d:1">
+            <span class="ps-card">
+              <span class="ps-dot" aria-hidden="true"></span>
+              <span class="ps-num" data-value="11"></span>
+              <span class="ps-label" data-text="stat2Label"></span>
+              <span class="ps-go"><span data-text="statsGoRates"></span><svg class="ps-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              <span class="ps-bar" aria-hidden="true"></span>
+            </span>
+          </a>
+          <div class="ps-tile" style="--d:2">
+            <div class="ps-card">
+              <span class="ps-num" data-value="56"></span>
+              <span class="ps-label" data-text="stat3Label"></span>
+              <span class="ps-bar" aria-hidden="true"></span>
+            </div>
+          </div>
+          <div class="ps-tile" style="--d:3">
+            <div class="ps-card">
+              <span class="ps-num" data-value="4"></span>
+              <span class="ps-label" data-text="stat4Label"></span>
+              <span class="ps-bar" aria-hidden="true"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="why" class="why" aria-labelledby="why-title" hidden>
+      <div class="why-inner">
+        <header class="why-head">
+          <p class="why-eyebrow why-rise" style="--d:0.05s" data-text="whyEyebrow"></p>
+          <h2 id="why-title" class="why-rise" style="--d:0.12s" data-text="whyTitle"></h2>
+          <p class="section-intro why-rise" style="--d:0.2s" data-text="whyIntro"></p>
+        </header>
+
+        <div class="why-acc why-rise" style="--d:0.3s">
+          <div class="why-item is-open">
+            <h3 class="why-h">
+              <button class="why-trigger" type="button" id="why-t1" aria-expanded="true" aria-controls="why-p1">
+                <span class="why-no">01</span>
+                <span class="why-name" data-text="why1Title"></span>
+                <span class="why-plus" aria-hidden="true"></span>
+              </button>
+            </h3>
+            <div class="why-body" id="why-p1" role="region" aria-labelledby="why-t1">
+              <div class="why-body-in">
+                <div class="why-art art-photo" aria-hidden="true"><img src="images/why-personal-support.jpg" alt="" loading="lazy" width="1400" height="782"></div>
+                <p data-text="why1Text"></p>
+              </div>
+            </div>
+          </div>
+          <div class="why-item">
+            <h3 class="why-h">
+              <button class="why-trigger" type="button" id="why-t2" aria-expanded="false" aria-controls="why-p2">
+                <span class="why-no">02</span>
+                <span class="why-name" data-text="why2Title"></span>
+                <span class="why-plus" aria-hidden="true"></span>
+              </button>
+            </h3>
+            <div class="why-body" id="why-p2" role="region" aria-labelledby="why-t2">
+              <div class="why-body-in">
+                <div class="why-art art-dhow" aria-hidden="true"><svg viewBox="0 0 240 160"><use href="#kw-dhow"/></svg></div>
+                <p data-text="why2Text"></p>
+              </div>
+            </div>
+          </div>
+          <div class="why-item">
+            <h3 class="why-h">
+              <button class="why-trigger" type="button" id="why-t3" aria-expanded="false" aria-controls="why-p3">
+                <span class="why-no">03</span>
+                <span class="why-name" data-text="why3Title"></span>
+                <span class="why-plus" aria-hidden="true"></span>
+              </button>
+            </h3>
+            <div class="why-body" id="why-p3" role="region" aria-labelledby="why-t3">
+              <div class="why-body-in">
+                <div class="why-art art-map" aria-hidden="true"><div class="map-stage"><img src="images/transfer-map-base.jpg" alt="" loading="lazy" width="1400" height="782"><div class="map-chips" id="map-chips"></div></div></div>
+                <p data-text="why3Text"></p>
+              </div>
+            </div>
+          </div>
+          <div class="why-item">
+            <h3 class="why-h">
+              <button class="why-trigger" type="button" id="why-t4" aria-expanded="false" aria-controls="why-p4">
+                <span class="why-no">04</span>
+                <span class="why-name" data-text="why4Title"></span>
+                <span class="why-plus" aria-hidden="true"></span>
+              </button>
+            </h3>
+            <div class="why-body" id="why-p4" role="region" aria-labelledby="why-t4">
+              <div class="why-body-in">
+                <div class="why-art art-photo art-regulated" aria-hidden="true"><img src="images/why-regulated.jpg" alt="" loading="lazy" width="1400" height="782"></div>
+                <p data-text="why4Text"></p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <article class="kw" id="kuwait">
+          <div class="kw-art" aria-hidden="true">
+            <span class="kw-sun"></span>
+            <svg class="kw-towers" viewBox="0 0 200 300"><use href="#kw-towers"/></svg>
+            <svg class="kw-dhow" viewBox="0 0 240 160"><use href="#kw-dhow"/></svg>
+            <span class="kw-sea"></span>
+          </div>
+          <div class="kw-text">
+            <p class="kw-eyebrow" data-text="kwEyebrow"></p>
+            <h3 class="kw-title" data-text="kwTitle"></h3>
+            <p class="kw-body" data-text="kwText"></p>
+            <div class="kw-stats">
+              <div><strong class="kw-num" id="stat-branches"></strong><span data-text="kwStatBranches"></span></div>
+              <div><strong class="kw-num" id="stat-rates"></strong><span data-text="kwStatDest"></span></div>
+              <div><strong class="kw-num" id="stat-curr"></strong><span data-text="kwStatCurr"></span></div>
+            </div>
+            <a class="btn btn-gold" href="#branches" data-text="kwLocations"></a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ===== 4. KIECO EXCHANGE EXPERIENCE ===== -->
+    <section id="services" class="experience">
+      <h2 data-text="expTitle"></h2>
+      <p class="section-intro" data-text="expIntro"></p>
+      <div class="exp-grid" id="exp-grid"></div>
+      <div class="center">
+        <button class="btn btn-help" id="help-open" type="button" aria-expanded="false" aria-controls="help">
+          <span class="help-open-text" data-text="helpOpenText"></span>
+          <span class="help-close-text" data-text="helpCloseText"></span>
+          <span class="help-chev" aria-hidden="true"></span>
+        </button>
+      </div>
+    </section>
+
+    <!-- ===== 4b. LET US HELP YOU CHOOSE (opens when the button above is pressed) ===== -->
+    <section id="help" class="help" aria-labelledby="help-title" hidden>
+      <div class="help-inner">
+        <header class="help-head">
+          <p class="help-eyebrow help-rise" style="--d:0.05s" data-text="helpEyebrow"></p>
+          <h2 id="help-title" class="help-rise" style="--d:0.12s" data-text="helpTitle"></h2>
+          <div class="help-call help-rise" style="--d:0.3s">
+            <a class="btn btn-gold help-call-btn" data-href="tel" data-text="helpCallTeam"></a>
+          </div>
+        </header>
+
+        <h3 class="help-choose help-rise" style="--d:0.4s" data-text="helpChooseTitle"></h3>
+
+        <div class="help-cards">
+          <div class="help-item help-rise" style="--d:0.5s">
+            <article class="help-card">
+              <span class="help-no" aria-hidden="true">01</span>
+              <span class="help-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg></span>
+              <p class="help-label" data-text="helpCallLabel"></p>
+              <h3 data-text="helpCallTitle"></h3>
+              <p class="help-text" data-text="helpCallText"></p>
+              <a class="help-link" data-href="tel" dir="ltr"><span data-text="phone"></span></a>
+            </article>
+          </div>
+          <div class="help-item help-rise" style="--d:0.62s">
+            <article class="help-card">
+              <span class="help-no" aria-hidden="true">02</span>
+              <span class="help-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></span>
+              <p class="help-label" data-text="helpWriteLabel"></p>
+              <h3 data-text="helpWriteTitle"></h3>
+              <p class="help-text" data-text="helpWriteText"></p>
+              <a class="help-link" href="#contact"><span data-text="helpWriteLink"></span><svg class="help-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+            </article>
+          </div>
+          <div class="help-item help-rise" style="--d:0.74s">
+            <article class="help-card">
+              <span class="help-no" aria-hidden="true">03</span>
+              <span class="help-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg></span>
+              <p class="help-label" data-text="helpVisitLabel"></p>
+              <h3 data-text="helpVisitTitle"></h3>
+              <p class="help-text" data-text="helpVisitText"></p>
+              <a class="help-link" href="#help-hq"><span data-text="helpExplore"></span><svg class="help-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+            </article>
+          </div>
+        </div>
+
+        <div class="help-hq help-rise" id="help-hq" style="--d:0.9s">
+          <div class="help-hq-text">
+            <p class="help-label" data-text="mapHeadTag"></p>
+            <h3 class="help-hq-title" data-text="helpHqTitle"></h3>
+            <p class="help-text" data-text="helpHqText"></p>
+            <p class="help-addr" data-text="address"></p>
+            <p class="help-addr" data-text="hours"></p>
+            <div class="help-actions">
+              <a class="btn btn-gold" data-href="directions" target="_blank" rel="noopener" data-text="mapDirections"></a>
+              <a class="btn btn-ghost-light" href="#branches" data-text="helpExplore"></a>
+            </div>
+          </div>
+          <div class="help-hq-visual">
+            <iframe id="hq-map" title="Head office map" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            <a class="help-hq-open" id="hq-map-link" href="#" target="_blank" rel="noopener" data-text="locGoogleMaps"></a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 5. HOW TO REMIT ONLINE ===== -->
+    <section class="remit">
+      <h2 data-text="remitTitle"></h2>
+      <ol class="steps" id="steps"></ol>
+      <div class="center">
+        <a class="btn btn-primary" data-href="register" data-text="registerText"></a>
+      </div>
+    </section>
+
+    <!-- ===== 6. GLOBAL ALLIANCES ===== -->
+    <section class="alliances">
+      <h2 data-text="allianceTitle"></h2>
+      <div class="logo-row">
+        <div class="logo-track" id="partner-track"></div>
+      </div>
+    </section>
+
+    <!-- ===== 7. CONTACT US ===== -->
+    <section id="contact" class="contact">
+      <h2 data-text="contactTitle"></h2>
+      <p class="section-intro" data-text="contactIntro"></p>
+      <div class="contact-grid">
+        <form class="contact-form" id="contact-form" novalidate>
+          <input type="text" name="name" data-placeholder="formName" aria-label="Name">
+          <input type="email" name="email" data-placeholder="formEmail" aria-label="Email">
+          <input type="tel" name="mobile" data-placeholder="formMobile" aria-label="Mobile">
+          <textarea name="message" rows="5" data-placeholder="formMessage" aria-label="Message"></textarea>
+          <!-- Placeholder: the real captcha will replace this box -->
+          <div class="captcha-placeholder">
+            <label class="captcha-box">
+              <input type="checkbox" id="captcha-check">
+              <span data-text="captchaText"></span>
+              <span class="captcha-robot"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a1 1 0 0 1 1 1v1h3a3 3 0 0 1 3 3v8a3 3 0 0 1-3 3H8a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3h3V3a1 1 0 0 1 1-1zM9 10.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm6 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM3 11h2v4H3zm16 0h2v4h-2z"/></svg></span>
+            </label>
+          </div>
+          <button class="btn btn-primary" type="submit" data-text="formSubmit"></button>
+          <p class="form-status" role="status" aria-live="polite"></p>
+        </form>
+
+        <aside class="contact-cards">
+          <div class="contact-card">
+            <div class="contact-head">
+              <span class="contact-icon is-office" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg></span>
+              <h3 data-text="cardOfficeTitle"></h3>
+            </div>
+            <p data-text="address"></p>
+            <p data-text="hours"></p>
+          </div>
+          <div class="contact-card">
+            <div class="contact-head">
+              <span class="contact-icon is-call" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg></span>
+              <h3 data-text="cardCallTitle"></h3>
+            </div>
+            <p><a data-href="tel" dir="ltr" data-text="phone"></a></p>
+          </div>
+          <div class="contact-card">
+            <div class="contact-head">
+              <span class="contact-icon is-mail" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></span>
+              <h3 data-text="cardEmailTitle"></h3>
+            </div>
+            <p><a data-href="mail" dir="ltr" data-text="email"></a></p>
+          </div>
+          <div class="contact-card is-whatsapp">
+            <div class="contact-head">
+              <span class="contact-icon is-whatsapp" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 0 0-7.8 13.5L3 21l4.7-1.2A9 9 0 1 0 12 3z"/><g transform="translate(6.5 6.5) scale(0.52)"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></g></svg></span>
+              <h3 data-text="cardWhatsappTitle"></h3>
+            </div>
+            <p><a data-href="whatsapp" target="_blank" rel="noopener" dir="ltr" data-text="whatsappNumber"></a></p>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- Shared drawings of Kuwait: the Kuwait Towers and a dhow (used as pictures in the Kuwait sections) -->
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+      <symbol id="kw-towers" viewBox="0 0 200 300">
+        <g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 296 H180"/>
+          <path d="M42 296 L48 150 H58 L64 296"/>
+          <path d="M90 296 L94 72 H104 L110 296"/>
+          <path d="M144 296 L148 122 H158 L164 296"/>
+          <path d="M52 150 Q72 158 88 176"/>
+          <path d="M158 122 Q132 170 110 186"/>
+          <circle cx="53" cy="136" r="11"/>
+          <circle cx="99" cy="120" r="30"/>
+          <ellipse cx="99" cy="120" rx="30" ry="7"/>
+          <circle cx="99" cy="54" r="8"/>
+          <circle cx="151" cy="108" r="12"/>
+        </g>
+      </symbol>
+      <symbol id="kw-dhow" viewBox="0 0 240 160">
+        <g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M120 16 V112"/>
+          <path d="M124 22 L200 104 H124 Z" fill="currentColor" fill-opacity=".35"/>
+          <path d="M116 40 L58 104 H116 Z" fill="currentColor" fill-opacity=".2"/>
+          <path d="M120 16 L134 22 L120 28"/>
+          <path d="M24 110 Q120 150 216 110 L200 132 Q120 150 40 132 Z" fill="currentColor" fill-opacity=".5"/>
+          <path d="M0 150 Q15 142 30 150 T60 150 T90 150 T120 150 T150 150 T180 150 T210 150 T240 150" stroke-opacity=".5"/>
+        </g>
+      </symbol>
+    </svg>
+
+    <!-- ===== 8. OUR LOCATIONS (branch finder: search, list, live map and the chosen branch) ===== -->
+    <section id="branches" class="locations" aria-labelledby="locations-title">
+      <div class="loc-inner">
+        <header class="loc-head">
+          <p class="loc-eyebrow" data-text="locEyebrow"></p>
+          <h2 class="loc-title" id="locations-title" data-text="locTitle"></h2>
+          <p class="loc-intro" data-text="locIntro"></p>
+        </header>
+
+        <div class="loc-bar">
+          <label class="loc-search">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+            <input type="search" id="loc-search" autocomplete="off" data-placeholder="locSearch" aria-label="Search branches">
+          </label>
+          <button class="loc-near" id="loc-near" type="button">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="2.5"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>
+            <span data-text="locNear"></span>
+          </button>
+        </div>
+
+        <div class="loc-subbar">
+          <div class="chips" id="chips"></div>
+          <label class="loc-toggle">
+            <input type="checkbox" id="loc-open">
+            <span class="loc-switch" aria-hidden="true"></span>
+            <span data-text="locOpenNow"></span>
+          </label>
+        </div>
+        <p class="loc-hint" id="loc-hint" aria-live="polite" hidden></p>
+
+        <div class="loc-body">
+          <aside class="loc-list-panel" aria-labelledby="loc-list-title">
+            <div class="loc-list-head">
+              <h3 id="loc-list-title" data-text="locListTitle"></h3>
+              <span class="loc-count" id="loc-count" aria-live="polite"></span>
+            </div>
+            <div class="branch-list" id="branchList"></div>
+            <p class="loc-empty" id="loc-empty" hidden data-text="locEmpty"></p>
+          </aside>
+
+          <div class="loc-map-panel">
+            <div class="loc-map" id="loc-map">
+              <iframe id="loc-frame" title="Kieco Exchange branches map" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+              <div class="loc-map-bar">
+                <button class="loc-pill" id="loc-all" type="button">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9c-2.5-2.7-3.8-5.7-3.8-9S9.5 5.7 12 3z"/></svg>
+                  <span data-text="locViewAll"></span>
+                </button>
+                <a class="loc-pill" id="loc-gmaps" href="#" target="_blank" rel="noopener">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M19 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h5"/></svg>
+                  <span data-text="locGoogleMaps"></span>
+                </a>
+              </div>
+            </div>
+            <div class="loc-detail" id="loc-detail" aria-live="polite"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Pages not built yet (anchors) ===== -->
+    <section id="news" class="anchor-section"></section>
+    <section id="faqs" class="anchor-section"></section>
+    <section id="about" class="anchor-section"></section>
+    <section id="app" class="anchor-section"></section>
+
+    <!-- Leadership: the General Manager and the CEO -->
+    <section class="leaders" id="leaders" aria-labelledby="leaders-title">
+      <div class="leaders-inner">
+        <header class="leaders-head">
+          <p class="leaders-eyebrow" data-text="leadersEyebrow"></p>
+          <h2 class="leaders-title" id="leaders-title" data-text="leadersTitle"></h2>
+        </header>
+        <div class="leaders-grid" id="leaders-grid"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="site-footer">
+    <div class="footer-grid">
+      <div class="footer-office">
+        <h3 class="office-title" data-text="cardOfficeTitle"></h3>
+        <p class="office-address" data-text="address"></p>
+        <div class="footer-logo-wrap">
+          <div class="logo-flip">
+            <img class="footer-logo" src="images/kieco-logo-gold.png" alt="Kieco Exchange" width="246" height="305">
+            <img class="footer-logo footer-logo-back" src="images/kieco-logo-gold.png" alt="" aria-hidden="true" width="246" height="305">
+          </div>
+        </div>
+        <p data-text="licence"></p>
+      </div>
+      <div>
+        <h3 data-text="footerQuick"></h3>
+        <ul id="footer-links"></ul>
+      </div>
+      <div>
+        <h3 data-text="footerSupport"></h3>
+        <ul id="footer-support"></ul>
+      </div>
+      <div>
+        <h3 data-text="footerApp"></h3>
+        <div class="store-badges">
+          <a class="badge" data-href="appStore" target="_blank" rel="noopener"><svg class="badge-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#ic-apple"/></svg><span data-text="appStoreText"></span></a>
+          <a class="badge" data-href="playStore" target="_blank" rel="noopener"><svg class="badge-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#ic-googleplay"/></svg><span data-text="playStoreText"></span></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p data-text="footerNote"></p>
+      <div id="social-links"></div>
+    </div>
+  </footer>
+
+  <!-- Brand logos: used by the store buttons and the social links -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <symbol id="ic-apple" viewBox="0 0 24 24"><path d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"/></symbol>
+    <symbol id="ic-googleplay" viewBox="0 0 24 24"><path d="M22.018 13.298l-3.919 2.218-3.515-3.493 3.543-3.521 3.891 2.202a1.49 1.49 0 0 1 0 2.594zM1.337.924a1.486 1.486 0 0 0-.112.568v21.017c0 .217.045.419.124.6l11.155-11.087L1.337.924zm12.207 10.065l3.258-3.238L3.45.195a1.466 1.466 0 0 0-.946-.179l11.04 10.973zm0 2.067l-11 10.933c.298.036.612-.016.906-.183l13.324-7.54-3.23-3.21z"/></symbol>
+    <symbol id="ic-instagram" viewBox="0 0 24 24"><path d="M7.0301.084c-1.2768.0602-2.1487.264-2.911.5634-.7888.3075-1.4575.72-2.1228 1.3877-.6652.6677-1.075 1.3368-1.3802 2.127-.2954.7638-.4956 1.6365-.552 2.914-.0564 1.2775-.0689 1.6882-.0626 4.947.0062 3.2586.0206 3.6671.0825 4.9473.061 1.2765.264 2.1482.5635 2.9107.308.7889.72 1.4573 1.388 2.1228.6679.6655 1.3365 1.0743 2.1285 1.38.7632.295 1.6361.4961 2.9134.552 1.2773.056 1.6884.069 4.9462.0627 3.2578-.0062 3.668-.0207 4.9478-.0814 1.28-.0607 2.147-.2652 2.9098-.5633.7889-.3086 1.4578-.72 2.1228-1.3881.665-.6682 1.0745-1.3378 1.3795-2.1284.2957-.7632.4966-1.636.552-2.9124.056-1.2809.0692-1.6898.063-4.948-.0063-3.2583-.021-3.6668-.0817-4.9465-.0607-1.2797-.264-2.1487-.5633-2.9117-.3084-.7889-.72-1.4568-1.3876-2.1228C21.2982 1.33 20.628.9208 19.8378.6165 19.074.321 18.2017.1197 16.9244.0645 15.6471.0093 15.236-.005 11.977.0014 8.718.0076 8.31.0215 7.0301.0839m.1402 21.6932c-1.17-.0509-1.8053-.2453-2.2287-.408-.5606-.216-.96-.4771-1.3819-.895-.422-.4178-.6811-.8186-.9-1.378-.1644-.4234-.3624-1.058-.4171-2.228-.0595-1.2645-.072-1.6442-.079-4.848-.007-3.2037.0053-3.583.0607-4.848.05-1.169.2456-1.805.408-2.2282.216-.5613.4762-.96.895-1.3816.4188-.4217.8184-.6814 1.3783-.9003.423-.1651 1.0575-.3614 2.227-.4171 1.2655-.06 1.6447-.072 4.848-.079 3.2033-.007 3.5835.005 4.8495.0608 1.169.0508 1.8053.2445 2.228.408.5608.216.96.4754 1.3816.895.4217.4194.6816.8176.9005 1.3787.1653.4217.3617 1.056.4169 2.2263.0602 1.2655.0739 1.645.0796 4.848.0058 3.203-.0055 3.5834-.061 4.848-.051 1.17-.245 1.8055-.408 2.2294-.216.5604-.4763.96-.8954 1.3814-.419.4215-.8181.6811-1.3783.9-.4224.1649-1.0577.3617-2.2262.4174-1.2656.0595-1.6448.072-4.8493.079-3.2045.007-3.5825-.006-4.848-.0608M16.953 5.5864A1.44 1.44 0 1 0 18.39 4.144a1.44 1.44 0 0 0-1.437 1.4424M5.8385 12.012c.0067 3.4032 2.7706 6.1557 6.173 6.1493 3.4026-.0065 6.157-2.7701 6.1506-6.1733-.0065-3.4032-2.771-6.1565-6.174-6.1498-3.403.0067-6.156 2.771-6.1496 6.1738M8 12.0077a4 4 0 1 1 4.008 3.9921A3.9996 3.9996 0 0 1 8 12.0077"/></symbol>
+    <symbol id="ic-x" viewBox="0 0 24 24"><path d="M14.234 10.162 22.977 0h-2.072l-7.591 8.824L7.251 0H.258l9.168 13.343L.258 24H2.33l8.016-9.318L16.749 24h6.993zm-2.837 3.299-.929-1.329L3.076 1.56h3.182l5.965 8.532.929 1.329 7.754 11.09h-3.182z"/></symbol>
+    <symbol id="ic-facebook" viewBox="0 0 24 24"><path d="M9.101 23.691v-7.98H6.627v-3.667h2.474v-1.58c0-4.085 1.848-5.978 5.858-5.978.401 0 .955.042 1.468.103a8.68 8.68 0 0 1 1.141.195v3.325a8.623 8.623 0 0 0-.653-.036 26.805 26.805 0 0 0-.733-.009c-.707 0-1.259.096-1.675.309a1.686 1.686 0 0 0-.679.622c-.258.42-.374.995-.374 1.752v1.297h3.919l-.386 2.103-.287 1.564h-3.246v8.245C19.396 23.238 24 18.179 24 12.044c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.628 3.874 10.35 9.101 11.647Z"/></symbol>
+    <symbol id="ic-linkedin" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></symbol>
+    <symbol id="ic-tiktok" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></symbol>
+    <symbol id="ic-whatsapp" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></symbol>
+  </svg>
+
+  <!-- ===== FLOATING WHATSAPP BUTTON ===== -->
+  <a class="whatsapp-float" data-href="whatsapp" target="_blank" rel="noopener" aria-label="Chat on WhatsApp"><svg class="wa-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#ic-whatsapp"/></svg><span data-text="whatsappLabel"></span></a>
+
+  <!-- ===== SCRIPTS (order matters) ===== -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11.1.4/swiper-bundle.min.js"></script>
+  <script src="js/content.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
